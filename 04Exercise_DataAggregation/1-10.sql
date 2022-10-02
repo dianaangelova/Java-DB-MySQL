@@ -35,3 +35,14 @@ FROM
 GROUP BY deposit_group 
 order by AVG(magic_wand_size)
 LIMIT 1;	
+
+-- 05. Deposits Sum
+
+SELECT 
+    deposit_group, SUM(deposit_amount) as total_sum
+FROM
+    wizzard_deposits
+GROUP BY deposit_group
+order by  total_sum;
+
+
