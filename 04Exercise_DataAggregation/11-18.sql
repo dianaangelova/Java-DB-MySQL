@@ -68,6 +68,26 @@ WHERE
 
 -- 16. 3rd Highest Salary
 
+SELECT 
+    *
+FROM
+    (SELECT 
+        department_id,
+            (SELECT DISTINCT
+                    salary
+                FROM
+                    employees t2
+                WHERE
+                    t2.department_id = t1.department_id
+                ORDER BY salary DESC
+                LIMIT 2 , 1) 'third_highest_salary'
+    FROM
+        employees t1
+    GROUP BY department_id
+    ORDER BY department_id) t3
+WHERE
+    t3.third_highest_salary IS NOT NULL;
+
 -- 17. Salary Challenge
 
 
@@ -95,3 +115,4 @@ FROM
     employees
 GROUP BY department_id
 ORDER BY department_id;
+
