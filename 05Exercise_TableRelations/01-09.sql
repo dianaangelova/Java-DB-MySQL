@@ -134,13 +134,21 @@ CREATE TABLE item_types (
     name VARCHAR(50) NOT NULL
 );
 
+
 CREATE TABLE items (
     item_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     item_type_id INT(11),
-    CONSTRAINT fk_items_item_types FOREIGN KEY (item_type_id)
+    FOREIGN KEY (item_type_id)
         REFERENCES item_types (item_type_id)
 );
+
+CREATE TABLE order_items (
+    order_id INT(11) NOT NULL,
+    item_id INT(11) NOT NULL,
+    PRIMARY KEY (order_id, item_id)
+);
+
 
 CREATE TABLE cities (
     city_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -158,76 +166,9 @@ CREATE TABLE customers (
 
 CREATE TABLE orders (
     order_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT(11) NOT NULL,
-    FOREIGN KEY (customer_id)
-        REFERENCES customers (customer_id)
-);
-
-CREATE TABLE order_items (
-    order_id INT(11) NOT NULL,
-    item_id INT(11) NOT NULL,
-    PRIMARY KEY (order_id , item_id),
-    CONSTRAINT fk_items FOREIGN KEY (item_id)
-        REFERENCES items (item_id),
-    CONSTRAINT fk_orders FOREIGN KEY (order_id)
-        REFERENCES orders (order_id)
-);
+    customer_id INT(11) NOT NULL
+    
+    );
 
 
--- 06. University Database
 
-create database university ;
-
-use university;
-
-CREATE TABLE subjects (
-    subject_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    subject_name VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE majors (
-    major_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE students (
-    student_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    student_number VARCHAR(12),
-    student_name VARCHAR(50),
-    major_id INT(11),
-    CONSTRAINT fk_majors FOREIGN KEY (major_id)
-        REFERENCES majors (major_id)
-);
-
-
-CREATE TABLE payments (
-    payment_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    payment_date date,
-    payment_amount decimal (8,2),
-    student_id int(11),
-      CONSTRAINT fk_students FOREIGN KEY (student_id)
-        REFERENCES students (student_id)
-);
-
-
-CREATE TABLE agenda (
-    student_id INT(11) NOT NULL,
-    subject_id INT(11) NOT NULL,
-    PRIMARY KEY (student_id , subject_id),
-    CONSTRAINT fk_students_1 FOREIGN KEY (student_id)
-        REFERENCES students (student_id),
-    CONSTRAINT fk_subjects FOREIGN KEY (subject_id)
-        REFERENCES subjects (subject_id)
-);
-
--- 09. Peaks in Rila
-
-SELECT 
-    mountain_range, peak_name, elevation AS peak_elevation
-FROM
-    peaks,
-    mountains
-WHERE
-    peaks.mountain_id = mountains.id
-        AND mountain_range = 'Rila'
-ORDER BY elevation DESC;
