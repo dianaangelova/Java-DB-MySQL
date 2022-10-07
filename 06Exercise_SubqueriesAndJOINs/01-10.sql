@@ -97,7 +97,65 @@ FROM
         employees.employee_id = employees_projects.employee_id) employee_project_id
 WHERE
     employee_project_id.project_id = projects.project_id
-        AND projects.start_date > '2002-08-13'
+        AND DATE(projects.start_date) > '2002-08-13'
         AND projects.end_date IS NULL
 ORDER BY employee_project_id.first_name , projects.name
+LIMIT 5;
+
+-- 08. Employee 24
+
+SELECT 
+    e.employee_id,
+    e.first_name,
+    CASE
+        WHEN YEAR(p.start_date) >= '2005' THEN p.name = NULL
+        ELSE p.name
+    END AS project_name
+FROM
+    employees AS e
+        JOIN
+    employees_projects AS ep USING (employee_id)
+        JOIN
+    projects AS p USING (project_id)
+WHERE
+    e.employee_id = 24
+ORDER BY e.first_name , p.name
+;
+
+-- 09. Employee Manager
+
+SELECT 
+    e.employee_id, e.first_name, e.manager_id, m.first_name
+FROM
+    employees e,
+    (SELECT 
+        first_name, employee_id
+    FROM
+        employees) m
+WHERE
+    e.manager_id = m.employee_id
+        AND e.manager_id IN (7 , 3)
+ORDER BY e.first_name;
+    
+    
+-- 10. Employee Summary
+
+SELECT 
+    e.employee_id,
+    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+    manager_name,
+    d.name AS department_name
+FROM
+    employees e,
+    (SELECT 
+        CONCAT(first_name, ' ', last_name) AS manager_name,
+            employee_id
+    FROM
+        employees) m,
+    departments d
+WHERE
+    e.manager_id = m.employee_id
+        AND d.department_id = e.department_id
+        AND e.manager_id IS NOT NULL
+ORDER BY e.employee_id
 LIMIT 5;
