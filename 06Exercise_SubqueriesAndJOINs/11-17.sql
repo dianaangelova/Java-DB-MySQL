@@ -40,3 +40,18 @@ ORDER BY mountain_range DESC;
 
 -- 14. Countries with Rivers
 
+SELECT 
+    af_countries.country_name, r.river_name
+FROM
+    (SELECT 
+        c.country_name, c_rivers.river_id
+    FROM
+        countries_rivers c_rivers
+    RIGHT JOIN countries c ON c_rivers.country_code = c.country_code
+    WHERE
+        continent_code = 'AF'
+    ORDER BY c.country_name) af_countries
+        left JOIN
+    rivers r ON af_countries.river_id = r.id
+    order by af_countries.country_name
+    limit 5;
