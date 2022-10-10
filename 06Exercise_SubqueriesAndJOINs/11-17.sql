@@ -55,3 +55,17 @@ FROM
     rivers r ON af_countries.river_id = r.id
     order by af_countries.country_name
     limit 5;
+
+
+ -- 16. Countries without any Mountains
+    
+    SELECT 
+    COUNT(country_name) country_count
+FROM
+    countries c
+        LEFT JOIN
+    mountains_countries m ON c.country_code = m.country_code
+WHERE
+    m.country_code IS NULL;
+    
+    
