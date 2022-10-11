@@ -69,3 +69,32 @@ WHERE
     m.country_code IS NULL;
     
     
+ -- 17. Highest Peak and Longest River by Country
+
+SELECT 
+    mount.country_name,
+    mount.highest_peak_elevation,
+    riv.longest_river_length
+FROM
+    (SELECT 
+        countries.country_name,
+            MAX(elevation) highest_peak_elevation
+    FROM
+        countries
+    LEFT JOIN mountains_countries ON countries.country_code = mountains_countries.country_code
+    LEFT JOIN peaks ON mountains_countries.mountain_id = peaks.mountain_id
+    GROUP BY countries.country_name
+    ORDER BY MAX(elevation) DESC) mount
+        JOIN
+    (SELECT 
+        countries.country_name,
+            MAX(rivers.length) longest_river_length
+    FROM
+        countries
+    LEFT JOIN countries_rivers ON countries.country_code = countries_rivers.country_code
+    LEFT JOIN rivers ON countries_rivers.river_id = rivers.id
+    GROUP BY countries.country_name
+    ORDER BY MAX(rivers.length) DESC) riv ON mount.country_name = riv.country_name
+ORDER BY mount.highest_peak_elevation DESC , riv.longest_river_length DESC , mount.country_name
+LIMIT 5;
+
