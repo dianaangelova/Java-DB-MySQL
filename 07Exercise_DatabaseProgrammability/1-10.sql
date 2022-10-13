@@ -78,13 +78,10 @@ end $$
 
 DELIMITER $$
 CREATE FUNCTION ufn_is_word_comprised(set_of_letters varchar(50), word varchar(50))
-RETURNS BINARY
+RETURNS INT
 DETERMINISTIC
 BEGIN
-   DECLARE salary_level VARCHAR(20);
-	IF salary<30000 then set salary_level := 'Low';
-	ELSEIF salary<=50000 then set salary_level := 'Average';
-	ELSE set salary_level := 'High';
-	END IF;
-   RETURN salary_level;
+   RETURN word REGEXP (CONCAT('^[', set_of_letters, ']+$'));
 END$$
+
+-- 08. Find Full Name
