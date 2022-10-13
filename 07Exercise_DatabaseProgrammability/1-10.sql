@@ -85,3 +85,25 @@ BEGIN
 END$$
 
 -- 08. Find Full Name
+
+DELIMITER $$
+
+create procedure usp_get_holders_full_name()
+begin
+select concat(first_name, ' ', last_name) as full_name from account_holders
+order by full_name, id;
+end $$
+
+DELIMITER ;
+
+-- 10. Future Value Function
+
+DELIMITER $$
+CREATE FUNCTION ufn_calculate_future_value (sum DECIMAL(10,4), yearly_interest_rate DECIMAL(10,4), number_of_years INT)
+RETURNS DECIMAL(10,4)
+DETERMINISTIC
+BEGIN
+   DECLARE result DECIMAL(10,4);
+   SET result := sum * pow((1+yearly_interest_rate), number_of_years);
+   RETURN result;
+END$$
